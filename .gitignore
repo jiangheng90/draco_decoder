@@ -3,4 +3,4 @@ examples/wasm/assets/
 examples/wasm/target/
 *.DS_Store
 .vscode
-
+/javascript

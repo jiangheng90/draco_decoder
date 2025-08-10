@@ -7,6 +7,35 @@ fn main() {
         return;
     }
 
+    // js-build
+    {
+        let js_dir = "third_party/draco_decoder_js";
+        let dist_dir = format!("{}/dist", js_dir);
+
+        println!("cargo:warning=Building draco_decoder_js...");
+
+        let status = Command::new("npm")
+            .arg("run")
+            .arg("build")
+            .current_dir(js_dir)
+            .status()
+            .expect("Failed to run npm build for draco_decoder_js");
+        assert!(status.success(), "npm build failed");
+
+        let dst_js = Path::new("javascript/index.es.js");
+        std::fs::create_dir_all(dst_js.parent().unwrap()).unwrap();
+        std::fs::copy(format!("{}/index.es.js", dist_dir), &dst_js)
+            .expect("Failed to copy index.es.js");
+
+        let dst_wasm = Path::new("javascript/draco3d/draco_decoder.wasm");
+        std::fs::create_dir_all(dst_wasm.parent().unwrap()).unwrap();
+        std::fs::copy(
+            format!("{}/draco3d/draco_decoder.wasm", dist_dir),
+            &dst_wasm,
+        )
+        .expect("Failed to copy draco_decoder.wasm");
+    }
+
     // Step 1: Build Draco with CMake
     let draco_dir = "third_party/draco";
     let draco_build = format!("{draco_dir}/build");

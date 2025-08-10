@@ -1,6 +1,6 @@
 [package]
 name = "draco_decoder"
-version = "0.0.2"
+version = "0.0.3"
 authors = ["jiang heng <https://github.com/jiangheng90/"]
 description = "a draco decoder on rust (wip)"
 repository = "https://github.com/jiangheng90/draco_decoder"
@@ -17,6 +17,7 @@ exclude = [
     "third_party/draco/unity/**",
     "assets/**",
     "target/**",
+    "javascript/**",
     ".git/**",
     ".vscode/**",
     "examples/wasm/**",
