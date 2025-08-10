@@ -1,0 +1,11 @@
+{
+    "author": "https://github.com/jiangheng90/",
+    "scripts": {
+        "clippy": "cargo clippy --all-targets --all-features",
+        "test:native": "cargo test --workspace --all-features",
+        "test:wasm": "wasm-pack test --safari --headless --workspace --all-features",
+        "test": "npm run test:native && npm run test:wasm",
+        "build:wasm-example": "sh tools/wasm_build.sh",
+        "perf": "sh tools/perf.sh"
+    }
+}
