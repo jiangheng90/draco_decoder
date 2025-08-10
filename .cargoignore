@@ -6,3 +6,11 @@ assets/
 target/
 third_party/draco/build
 examples/wasm
+
+*.o
+*.obj
+*.a
+*.so
+*.dll
+*.dylib
+*.log
