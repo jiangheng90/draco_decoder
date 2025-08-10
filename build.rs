@@ -15,6 +15,14 @@ fn main() {
         println!("cargo:warning=Building draco_decoder_js...");
 
         let status = Command::new("npm")
+            .arg("i")
+            .current_dir(js_dir)
+            .status()
+            .expect("Failed to run npm i for draco_decoder_js");
+
+        assert!(status.success(), "npm i failed");
+
+        let status = Command::new("npm")
             .arg("run")
             .arg("build")
             .current_dir(js_dir)
