@@ -6,7 +6,7 @@ description = "a draco decoder on rust (wip)"
 documentation = ""
 repository = "https://github.com/jiangheng90/draco_decoder"
 homepage = "https://github.com/jiangheng90/draco_decoder"
-keywords = ["glTF", "3D", "draco", "decoder"]
+keywords = ["draco", "decoder"]
 license = "MIT OR Apache-2.0"
 edition = "2024"
 
