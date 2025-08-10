@@ -3,12 +3,24 @@ name = "draco_decoder"
 version = "0.0.1"
 authors = ["jiang heng <https://github.com/jiangheng90/"]
 description = "a draco decoder on rust (wip)"
-documentation = ""
 repository = "https://github.com/jiangheng90/draco_decoder"
 homepage = "https://github.com/jiangheng90/draco_decoder"
 keywords = ["draco", "decoder"]
 license = "MIT OR Apache-2.0"
 edition = "2024"
+exclude = [
+    "third_party/draco/build/**",
+    "third_party/draco/testdata/**",
+    "third_party/draco/docs/**",
+    "third_party/draco/javascript/**",
+    "third_party/draco/maya/**",
+    "third_party/draco/unity/**",
+    "assets/**",
+    "target/**",
+    ".git/**",
+    ".vscode/**",
+    "examples/wasm/**",
+]
 
 [dependencies]
 bytemuck = "1.0"
