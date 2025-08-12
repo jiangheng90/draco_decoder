@@ -35,6 +35,14 @@ impl MeshAttribute {
     pub fn lenght(&self) -> u32 {
         self.lenght
     }
+
+    pub fn data_type(&self) -> AttributeDataType {
+        self.data_type
+    }
+
+    pub fn dim(&self) -> u32 {
+        self.dim
+    }
 }
 
 #[derive(Debug)]
