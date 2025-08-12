@@ -190,7 +190,7 @@ dependencies = [
 
 [[package]]
 name = "draco_decoder"
-version = "0.0.7"
+version = "0.0.8"
 dependencies = [
  "base64",
  "bytemuck",

@@ -19,7 +19,7 @@ impl AttributeDataType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Copy, Clone, Debug)]
 pub struct MeshAttribute {
     dim: u32,
     data_type: AttributeDataType,
@@ -79,6 +79,10 @@ impl MeshDecodeConfig {
 
     pub fn get_attribute(&self, index: usize) -> Option<&MeshAttribute> {
         self.attributes.get(index)
+    }
+
+    pub fn attributes(&self) -> Vec<MeshAttribute> {
+        self.attributes.clone()
     }
 }
 
