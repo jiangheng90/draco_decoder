@@ -1,4 +1,5 @@
 use js_sys::{Promise, Uint8Array};
+use std::cell::RefCell;
 use wasm_bindgen::JsCast;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen_futures::JsFuture;
@@ -8,10 +9,15 @@ use crate::{AttributeDataType, AttributeValues, MeshDecodeConfig};
 
 use web_sys::console;
 
-async fn decode_draco_mesh_from_embedded_js(
-    data: &js_sys::Uint8Array,
-    byte_length: usize,
-) -> Result<js_sys::Uint8Array, JsValue> {
+thread_local! {
+    static DRACO_DECODE_FUNC_MODULE: RefCell<Option<JsValue>> = RefCell::new(None);
+}
+
+async fn get_js_module() -> Result<JsValue, JsValue> {
+    if let Some(module) = DRACO_DECODE_FUNC_MODULE.with(|m| m.borrow().clone()) {
+        return Ok(module);
+    }
+
     let js_code = include_str!("../javascript/index.es.js");
     let escaped = js_code.replace("\\", "\\\\").replace("`", "\\`");
 
@@ -33,6 +39,17 @@ async fn decode_draco_mesh_from_embedded_js(
     let js_module = js_sys::eval(&setup_code)?;
     let module_promise: Promise = js_module.dyn_into()?;
     let module = JsFuture::from(module_promise).await?;
+
+    DRACO_DECODE_FUNC_MODULE.with(|m| m.replace(Some(module.clone())));
+
+    Ok(module)
+}
+
+async fn decode_draco_mesh_from_embedded_js(
+    data: &js_sys::Uint8Array,
+    byte_length: usize,
+) -> Result<js_sys::Uint8Array, JsValue> {
+    let module = get_js_module().await?;
 
     // Call the decode function from the module
     let decode_fn = js_sys::Reflect::get(&module, &JsValue::from_str("decodeDracoMeshInWorker"))?
