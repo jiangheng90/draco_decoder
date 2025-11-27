@@ -33,11 +33,11 @@ async fn fetch_binary(url: &str) -> Result<Vec<u8>, JsValue> {
 fn main() {
     #[cfg(target_arch = "wasm32")]
     spawn_local(async {
-        use draco_decoder::{AttributeDataType, MeshDecodeConfig};
+        use draco_decoder::{AttributeDataType, DracoDecodeConfig};
 
         console::log_1(&"Starting wasm test...".into());
 
-        let mut config = MeshDecodeConfig::new(16744, 54663);
+        let mut config = DracoDecodeConfig::new(16744, 54663);
         config.add_attribute(3, AttributeDataType::Float32);
         config.add_attribute(2, AttributeDataType::Float32);
 

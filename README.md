@@ -20,11 +20,11 @@ This design provides a unified Rust API while seamlessly switching between nativ
 ## native/wasm usage
 
 ```rust
-use draco_decoder::{MeshDecodeConfig, AttributeDataType, decode_mesh};
+use draco_decoder::{DracoDecodeConfig, AttributeDataType, decode_mesh};
 
 // some async wrapper
 
-let mut config = MeshDecodeConfig::new(vertex_count, index_count);
+let mut config = DracoDecodeConfig::new(vertex_count, index_count);
 
 // Add attributes to decode (dimention and data type)
 config.add_attribute(dim, AttributeDataType::Float32);

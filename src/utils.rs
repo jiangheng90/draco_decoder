@@ -46,14 +46,14 @@ impl MeshAttribute {
 }
 
 #[derive(Debug)]
-pub struct MeshDecodeConfig {
+pub struct DracoDecodeConfig {
     vertex_count: u32,
     index_count: u32,
     index_length: u32,
     attributes: Vec<MeshAttribute>,
 }
 
-impl MeshDecodeConfig {
+impl DracoDecodeConfig {
     pub fn new(vertex_count: u32, index_count: u32) -> Self {
         let index_length = if index_count <= u16::MAX as u32 {
             index_count as usize * 2
@@ -94,7 +94,7 @@ impl MeshDecodeConfig {
     }
 }
 
-impl MeshDecodeConfig {
+impl DracoDecodeConfig {
     pub fn estimate_buffer_size(&self) -> usize {
         let mut size = 0;
 

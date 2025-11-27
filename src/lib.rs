@@ -6,17 +6,17 @@ mod wasm;
 
 #[cfg(not(target_arch = "wasm32"))]
 use ffi::decode_mesh_native;
-pub use utils::{AttributeDataType, AttributeValues, MeshAttribute, MeshDecodeConfig};
+pub use utils::{AttributeDataType, AttributeValues, MeshAttribute, DracoDecodeConfig};
 #[cfg(target_arch = "wasm32")]
 use wasm::decode_mesh_wasm_worker;
 
 #[cfg(not(target_arch = "wasm32"))]
-pub async fn decode_mesh(data: &[u8], config: &MeshDecodeConfig) -> Option<Vec<u8>> {
+pub async fn decode_mesh(data: &[u8], config: &DracoDecodeConfig) -> Option<Vec<u8>> {
     decode_mesh_native(data, config).await
 }
 
 #[cfg(target_arch = "wasm32")]
-pub async fn decode_mesh(data: &[u8], config: &MeshDecodeConfig) -> Option<Vec<u8>> {
+pub async fn decode_mesh(data: &[u8], config: &DracoDecodeConfig) -> Option<Vec<u8>> {
     decode_mesh_wasm_worker(data, config).await
 }
 
@@ -25,7 +25,7 @@ mod tests {
 
     #[cfg(not(target_arch = "wasm32"))]
     use super::ffi::{debug_estimate_draco_buffer_len, decode_point_cloud_native};
-    use super::utils::{AttributeDataType, MeshDecodeConfig};
+    use super::utils::{AttributeDataType, DracoDecodeConfig};
     use crate::decode_mesh;
     use std::collections::HashSet;
     use std::fs::{self};
@@ -76,7 +76,7 @@ mod tests {
 
         let expect_len = debug_estimate_draco_buffer_len(&input);
 
-        let mut config = MeshDecodeConfig::new(16744, 54663);
+        let mut config = DracoDecodeConfig::new(16744, 54663);
         config.add_attribute(3, AttributeDataType::Float32);
         config.add_attribute(2, AttributeDataType::Float32);
 
@@ -87,7 +87,7 @@ mod tests {
     }
 
     async fn test_mesh(data: &[u8]) -> Vec<u8> {
-        let mut config = MeshDecodeConfig::new(16744, 54663);
+        let mut config = DracoDecodeConfig::new(16744, 54663);
         config.add_attribute(3, AttributeDataType::Float32);
         config.add_attribute(2, AttributeDataType::Float32);
 
@@ -122,7 +122,7 @@ mod tests {
     #[cfg_attr(not(target_arch = "wasm32"), test)]
     #[cfg_attr(target_arch = "wasm32", wasm_bindgen_test)]
     fn test_config() {
-        let mut config = MeshDecodeConfig::new(16744, 54663);
+        let mut config = DracoDecodeConfig::new(16744, 54663);
         config.add_attribute(3, AttributeDataType::Float32);
         config.add_attribute(2, AttributeDataType::Float32);
 

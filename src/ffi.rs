@@ -1,4 +1,4 @@
-use crate::MeshDecodeConfig;
+use crate::DracoDecodeConfig;
 #[cfg(feature = "perf")]
 use std::time::Instant;
 
@@ -26,7 +26,7 @@ pub fn decode_point_cloud_native(data: &[u8]) -> Vec<u8> {
     cpp::decode_point_cloud(data)
 }
 
-pub async fn decode_mesh_native(data: &[u8], config: &MeshDecodeConfig) -> Option<Vec<u8>> {
+pub async fn decode_mesh_native(data: &[u8], config: &DracoDecodeConfig) -> Option<Vec<u8>> {
     #[cfg(feature = "perf")]
     let start = Instant::now();
     let mut out_buf = vec![0u8; config.estimate_buffer_size()];

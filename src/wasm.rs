@@ -5,7 +5,7 @@ use wasm_bindgen::prelude::*;
 use wasm_bindgen_futures::JsFuture;
 use web_sys::window;
 
-use crate::{AttributeDataType, AttributeValues, MeshDecodeConfig};
+use crate::{AttributeDataType, AttributeValues, DracoDecodeConfig};
 
 use web_sys::console;
 
@@ -62,7 +62,7 @@ async fn decode_draco_mesh_from_embedded_js(
     Ok(out_buf.dyn_into::<Uint8Array>()?)
 }
 
-pub async fn decode_mesh_wasm_worker(data: &[u8], config: &MeshDecodeConfig) -> Option<Vec<u8>> {
+pub async fn decode_mesh_wasm_worker(data: &[u8], config: &DracoDecodeConfig) -> Option<Vec<u8>> {
     let js_array = Uint8Array::from(data);
     let estimate_buffer_size = config.estimate_buffer_size();
 
