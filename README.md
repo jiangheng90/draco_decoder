@@ -2,9 +2,6 @@
 
 `draco_decoder` is a Rust library for decoding Draco compressed meshes. It provides native and WebAssembly (WASM) support with efficient bindings to the official Draco C++ library.
 
-⚠️ Warning:
-This crate currently only supports building on Linux and macOS platforms. Windows is not supported yet. and for the sake of building draco. cmake is required.
-
 ## Overview
 
 - **Native:**  
@@ -15,6 +12,14 @@ This crate currently only supports building on Linux and macOS platforms. Window
   [https://github.com/jiangheng90/draco_decoder_js.git](https://github.com/jiangheng90/draco_decoder_js.git)
 
 This design provides a unified Rust API while seamlessly switching between native and WASM implementations under the hood.
+
+## build guide
+- install essential for draco build
+- cargo build 
+
+
+⚠️ Warning:
+This crate currently work in progress, I have not tested on many devices of building.  now on windows it only support build on MSVC, and it may have some build issues. 
 
 
 ## native/wasm usage

@@ -7,6 +7,68 @@ fn main() {
         return;
     }
 
+    let target = std::env::var("TARGET").unwrap();
+
+    if target.contains("windows-msvc") {
+        let draco_build = "third_party/draco/build";
+        let draco_install = format!("{}/Release", draco_build);
+
+        if !Path::new(draco_build).exists() {
+            std::fs::create_dir_all(draco_build).unwrap();
+        }
+
+        // CMake Config
+        let cmake_args = [
+            "..",
+            "-G",
+            "Visual Studio 17 2022",
+            "-A",
+            "x64",
+            "-DBUILD_SHARED_LIBS=OFF",
+            "-DCMAKE_BUILD_TYPE=Release",
+            "-DDRACO_TESTS=OFF",
+            &format!("-DCMAKE_INSTALL_PREFIX={}", draco_install),
+        ];
+
+        let status = Command::new("cmake")
+            .args(&cmake_args)
+            .current_dir(draco_build)
+            .status()
+            .expect("Failed to run CMake");
+        assert!(status.success(), "CMake configuration failed");
+
+        // build & install
+        for cmd_args in &[
+            vec!["--build", ".", "--config", "Release"],
+            vec!["--install", ".", "--config", "Release"],
+        ] {
+            let status = Command::new("cmake")
+                .args(cmd_args)
+                .current_dir(draco_build)
+                .status()
+                .expect("Failed to execute cmake");
+            assert!(status.success(), "Draco build/install failed");
+        }
+
+        // CXX bridge
+        cxx_build::bridge("src/ffi.rs")
+            .file("cpp/decoder_api.cc")
+            .include("include")
+            .include("third_party/draco/src")
+            .include("third_party/draco/build")
+            .include(format!("{draco_install}/include"))
+            .flag_if_supported("-std=c++17")
+            .compile("decoder_api");
+
+        // Link Draco
+        println!("cargo:rustc-link-search=native={}", draco_install);
+        println!("cargo:rustc-link-lib=static=draco");
+
+        println!("cargo:rerun-if-changed=cpp/decoder_api.cc");
+        println!("cargo:rerun-if-changed=include/decoder_api.h");
+        return;
+    }
+
     // Step 1: Build Draco with CMake
     let draco_dir = "third_party/draco";
     let draco_build = format!("{draco_dir}/build");
