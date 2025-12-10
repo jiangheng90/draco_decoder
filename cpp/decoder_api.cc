@@ -85,7 +85,7 @@ size_t decode_mesh_direct_write(const uint8_t *data, size_t data_len,
     return true;
   };
 
-  // Write indices
+  // Write indices (same as before)
   const int num_faces = mesh->num_faces();
   const int num_indices = num_faces * 3;
 
@@ -116,77 +116,101 @@ size_t decode_mesh_direct_write(const uint8_t *data, size_t data_len,
     }
   }
 
-  const int attr_count = mesh->num_attributes();
+  // --------- NEW: SORT ATTRIBUTES BY attribute_id (unique_id) ----------
+  struct AttrEntry {
+    const draco::PointAttribute *attr = nullptr;
+    int attribute_id = 0;
+  };
 
-  for (int i = 0; i < attr_count; ++i) {
+  std::vector<AttrEntry> attrs;
+  attrs.reserve(mesh->num_attributes());
+
+  for (int i = 0; i < mesh->num_attributes(); ++i) {
     const draco::PointAttribute *attr = mesh->attribute(i);
 
-    const int num_points = mesh->num_points();
-    const int dim = attr->num_components();
+    AttrEntry e;
+    e.attr = attr;
+    e.attribute_id = attr->unique_id();
+
+    attrs.push_back(e);
+  }
+
+  std::sort(attrs.begin(), attrs.end(),
+            [](const AttrEntry &a, const AttrEntry &b) {
+              return a.attribute_id < b.attribute_id;
+            });
+
+  // --------- WRITE ATTRIBUTES IN SORTED ORDER ----------
+  int num_points = mesh->num_points();
+
+  for (auto &entry : attrs) {
+    const draco::PointAttribute *attr = entry.attr;
+    int dim = attr->num_components();
+    draco::DataType type = attr->data_type();
 
     for (draco::PointIndex j(0); j < num_points; ++j) {
-      switch (attr->data_type()) {
+      switch (type) {
       case draco::DT_INT8: {
         int8_t v[4] = {};
-        attr->ConvertValue(attr->mapped_index(j), &v[0]);
+        attr->ConvertValue(attr->mapped_index(j), v);
         for (int k = 0; k < dim; ++k)
-          if (!write_scalar(&v[k], draco::DT_INT8))
+          if (!write_scalar(&v[k], type))
             return 0;
         break;
       }
       case draco::DT_UINT8: {
         uint8_t v[4] = {};
-        attr->ConvertValue(attr->mapped_index(j), &v[0]);
+        attr->ConvertValue(attr->mapped_index(j), v);
         for (int k = 0; k < dim; ++k)
-          if (!write_scalar(&v[k], draco::DT_UINT8))
+          if (!write_scalar(&v[k], type))
             return 0;
         break;
       }
       case draco::DT_INT16: {
         int16_t v[4] = {};
-        attr->ConvertValue(attr->mapped_index(j), &v[0]);
+        attr->ConvertValue(attr->mapped_index(j), v);
         for (int k = 0; k < dim; ++k)
-          if (!write_scalar(&v[k], draco::DT_INT16))
+          if (!write_scalar(&v[k], type))
             return 0;
         break;
       }
       case draco::DT_UINT16: {
         uint16_t v[4] = {};
-        attr->ConvertValue(attr->mapped_index(j), &v[0]);
+        attr->ConvertValue(attr->mapped_index(j), v);
         for (int k = 0; k < dim; ++k)
-          if (!write_scalar(&v[k], draco::DT_UINT16))
+          if (!write_scalar(&v[k], type))
             return 0;
         break;
       }
       case draco::DT_INT32: {
         int32_t v[4] = {};
-        attr->ConvertValue(attr->mapped_index(j), &v[0]);
+        attr->ConvertValue(attr->mapped_index(j), v);
         for (int k = 0; k < dim; ++k)
-          if (!write_scalar(&v[k], draco::DT_INT32))
+          if (!write_scalar(&v[k], type))
             return 0;
         break;
       }
       case draco::DT_UINT32: {
         uint32_t v[4] = {};
-        attr->ConvertValue(attr->mapped_index(j), &v[0]);
+        attr->ConvertValue(attr->mapped_index(j), v);
         for (int k = 0; k < dim; ++k)
-          if (!write_scalar(&v[k], draco::DT_UINT32))
+          if (!write_scalar(&v[k], type))
             return 0;
         break;
       }
       case draco::DT_FLOAT32: {
         float v[4] = {};
-        attr->ConvertValue(attr->mapped_index(j), &v[0]);
+        attr->ConvertValue(attr->mapped_index(j), v);
         for (int k = 0; k < dim; ++k)
-          if (!write_scalar(&v[k], draco::DT_FLOAT32))
+          if (!write_scalar(&v[k], type))
             return 0;
         break;
       }
       case draco::DT_FLOAT64: {
         double v[4] = {};
-        attr->ConvertValue(attr->mapped_index(j), &v[0]);
+        attr->ConvertValue(attr->mapped_index(j), v);
         for (int k = 0; k < dim; ++k)
-          if (!write_scalar(&v[k], draco::DT_FLOAT64))
+          if (!write_scalar(&v[k], type))
             return 0;
         break;
       }

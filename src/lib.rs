@@ -6,7 +6,7 @@ mod wasm;
 
 #[cfg(not(target_arch = "wasm32"))]
 use ffi::decode_mesh_native;
-pub use utils::{AttributeDataType, AttributeValues, MeshAttribute, DracoDecodeConfig};
+pub use utils::{AttributeDataType, AttributeValues, DracoDecodeConfig, MeshAttribute};
 #[cfg(target_arch = "wasm32")]
 use wasm::decode_mesh_wasm_worker;
 
@@ -71,14 +71,14 @@ mod tests {
     #[test]
     fn test_mesh_buffer_len() {
         #[cfg(not(target_arch = "wasm32"))]
-        let input = fs::read("assets/extracted_model/extracted_model_data.bin")
-            .expect("Failed to read model file");
+        let input = fs::read("assets/20/20_data.bin").expect("Failed to read model file");
 
         let expect_len = debug_estimate_draco_buffer_len(&input);
 
-        let mut config = DracoDecodeConfig::new(16744, 54663);
+        let mut config = DracoDecodeConfig::new(3254, 4368);
         config.add_attribute(3, AttributeDataType::Float32);
-        config.add_attribute(2, AttributeDataType::Float32);
+        config.add_attribute(3, AttributeDataType::Float32);
+        config.add_attribute(1, AttributeDataType::Float32);
 
         let actual_len = config.estimate_buffer_size();
         println!("{actual_len}");
@@ -87,9 +87,10 @@ mod tests {
     }
 
     async fn test_mesh(data: &[u8]) -> Vec<u8> {
-        let mut config = DracoDecodeConfig::new(16744, 54663);
+        let mut config = DracoDecodeConfig::new(3254, 4368);
         config.add_attribute(3, AttributeDataType::Float32);
-        config.add_attribute(2, AttributeDataType::Float32);
+        config.add_attribute(3, AttributeDataType::Float32);
+        config.add_attribute(1, AttributeDataType::Float32);
 
         let Some(buf) = decode_mesh(data, &config).await else {
             panic!("Mesh decode fail")
@@ -102,13 +103,13 @@ mod tests {
     #[cfg(not(target_arch = "wasm32"))]
     #[tokio::test]
     async fn test_decode_mesh() {
-        let input = fs::read("assets/extracted_model/extracted_model_data.bin")
+        let input = fs::read("assets/20/20_data.bin")
             .expect("Failed to read model file");
 
         let out_buf = test_mesh(&input).await;
 
-        fs::create_dir_all("assets/decode_model").ok();
-        let path = "assets/decode_model/extracted_model_data.bin";
+        fs::create_dir_all("assets/20_decode").ok();
+        let path = "assets/20_decode/20_data.bin";
         fs::write(path, &out_buf).expect("Failed to write decoded mesh binary");
         println!("Wrote decoded mesh to {path}");
     }

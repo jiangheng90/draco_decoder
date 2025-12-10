@@ -1,0 +1,138 @@
+{
+  "accessors": [
+    {
+      "componentType": 5123,
+      "count": 4368,
+      "type": "SCALAR",
+      "min": [
+        0
+      ],
+      "max": [
+        4367
+      ]
+    },
+    {
+      "componentType": 5126,
+      "count": 3254,
+      "type": "VEC3",
+      "min": [
+        -0.9779633283615112,
+        -0.7554954886436462,
+        -0.7446907758712769
+      ],
+      "max": [
+        0.9773461818695068,
+        0.7555253505706787,
+        0.7637529373168945
+      ]
+    },
+    {
+      "componentType": 5126,
+      "count": 3254,
+      "type": "VEC3",
+      "min": [
+        -421.3786315917969,
+        -253.08700561523438,
+        -93.6451644897461
+      ],
+      "max": [
+        350.3247985839844,
+        133.63624572753906,
+        183.04193115234375
+      ]
+    },
+    {
+      "componentType": 5126,
+      "count": 3254,
+      "type": "SCALAR",
+      "min": [
+        0
+      ],
+      "max": [
+        3
+      ]
+    }
+  ],
+  "asset": {
+    "version": "2.0"
+  },
+  "buffers": [
+    {
+      "uri": "20_data.bin",
+      "byteLength": 7288
+    }
+  ],
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteOffset": 0,
+      "byteLength": 7288
+    }
+  ],
+  "materials": [
+    {
+      "alphaMode": "OPAQUE",
+      "doubleSided": true,
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "metallicFactor": 0,
+        "roughnessFactor": 0
+      },
+      "emissiveFactor": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "meshes": [
+    {
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 2,
+            "_BATCHID": 3
+          },
+          "material": 0,
+          "mode": 4,
+          "indices": 0,
+          "extensions": {
+            "KHR_draco_mesh_compression": {
+              "bufferView": 0,
+              "attributes": {
+                "NORMAL": 0,
+                "POSITION": 1,
+                "_BATCHID": 2
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "mesh": 0
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "extensionsRequired": [
+    "KHR_draco_mesh_compression"
+  ],
+  "extensionsUsed": [
+    "KHR_draco_mesh_compression"
+  ]
+}

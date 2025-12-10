@@ -41,7 +41,7 @@ fn main() {
         config.add_attribute(3, AttributeDataType::Float32);
         config.add_attribute(2, AttributeDataType::Float32);
 
-        match fetch_binary("assets/extracted_model/extracted_model_data.bin").await {
+        match fetch_binary("assets/20/20_data.bin").await {
             Ok(bin) => {
                 use draco_decoder::decode_mesh;
                 let perf = web_sys::window().unwrap().performance().unwrap();
@@ -67,7 +67,7 @@ fn main() {
                         let document = window.document().unwrap();
                         let a = document.create_element("a").unwrap();
                         a.set_attribute("href", &url).unwrap();
-                        a.set_attribute("download", "extracted_model_data.bin")
+                        a.set_attribute("download", "20_data.bin")
                             .unwrap();
                         let a_elem: HtmlElement = a.dyn_into().unwrap();
                         a_elem.click();
