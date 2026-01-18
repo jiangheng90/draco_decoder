@@ -2,6 +2,11 @@ use std::path::Path;
 use std::process::Command;
 
 fn main() {
+    if std::env::var("DOCS_RS").is_ok() {
+        println!("cargo:warning=Skipping native build on docs.rs");
+        return;
+    }
+
     if std::env::var("CARGO_CFG_TARGET_ARCH").unwrap_or_default() == "wasm32" {
         println!("cargo:warning=Skipping build.rs on wasm32 target");
         return;
